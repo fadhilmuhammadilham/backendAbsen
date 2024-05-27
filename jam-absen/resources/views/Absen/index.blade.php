@@ -81,7 +81,7 @@
                         <td>{{$item['jam_telat']}}</td>
                         <td>{{$item['jam_keluar']}}</td>
                         <td>
-                            <a href=""  class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{{ url('absen/'.$item['id']) }}" class="btn btn-warning btn-sm">Edit</a>
                             <a href="" class="btn btn-danger btn-sm">Del</a>
                             <a href="" class="btn btn-primary btn-sm">Keluar</a>
                         </td>
