@@ -82,12 +82,12 @@
                         <td>{{$item['jam_telat']}}</td>
                         <td>{{$item['jam_keluar']}}</td>
                         <td>
-                            <a href="" class="btn btn-warning btn-sm">Edit</a>
-                            {{-- <form action="{{ url('/').$item['id'] }}" method="POST" onsubmit="return confirm('apakah yakin ingin menghapus data?')" class="d-inline">
-                            @csrf
-                            @method('delete')    
-                            </form> --}}
-                            <a href="" name="submit" class="btn btn-danger btn-sm">Del<a>
+                            <a href="{{ url('absen/edit/'.$item['id'])}}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ url('absen/'.$item['id']) }}" method="POST" onsubmit=" confirm('apakah anda yakin ingin menghapus data?')" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" >Delete</button>
+                            </form>                             
                             <a href="" class="btn btn-primary btn-sm">Keluar</a>
                         </td>
                     </tr>

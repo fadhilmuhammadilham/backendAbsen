@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absen;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class AbsenController extends Controller
 
         if ($status_waktu == 'tepat_waktu') {
             $jam_masuk = Carbon::now()->format('H:i:s');
-        }elseif ($status_waktu == 'terlambat') {
+        } elseif ($status_waktu == 'terlambat') {
             $jam_telat = Carbon::now()->format('H:i:s');
         }
 
@@ -92,21 +93,64 @@ class AbsenController extends Controller
         //     $error = $contentArray['massage'];
         //     return redirect()->to('/')->withErrors($error);
         // }
+        $absen = Absen::find($id);
+
+        if (!$absen) {
+            return redirect('/')->withErrors('Data tidak ditemukan');
+        }
+
+        return view('Absen.editAbsen', ['absen' => $absen]);
     }
-    
+
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        //
+{
+    $request->validate([
+        'nama' => 'required',
+        'jam_masuk' => 'nullable|date_format:H:i:s',
+        'jam_telat' => 'nullable|date_format:H:i:s',
+        'jam_keluar' => 'nullable|date_format:H:i:s',
+    ]);
+
+    $absen = Absen::find($id);
+
+    if (!$absen) {
+        return redirect('/')->withErrors('Data tidak ditemukan');
     }
+
+    $absen->nama = $request->nama;
+    $absen->jam_masuk = $request->jam_masuk;
+    $absen->jam_telat = $request->jam_telat;
+    $absen->jam_keluar = $request->jam_keluar;
+
+    $absen->save();
+
+    return redirect('/')->with('success', 'Data berhasil diupdate');
+}
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
+{
+    $absen = Absen::find($id);
+
+    if (!$absen) {
+        // Debugging
+        return redirect('/')->withErrors('Data tidak ditemukan dengan ID: ' . $id);
+    }
+
+    $absen->delete();
+
+    return redirect('/')->with('success', 'Data berhasil dihapus');
+}
+
+    
+}
+
         //  $client = new Client();
         // $url = "http://localhost:8000/api/absen/$id";
         // $response = $client->request('Delete', $url);
@@ -118,5 +162,3 @@ class AbsenController extends Controller
         // } else {
         //     return redirect()->to('/')->with('succsess', 'Berhasil hapus data');
         // }
-    }
-}

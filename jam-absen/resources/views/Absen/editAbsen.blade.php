@@ -12,29 +12,36 @@
     <main class="container">
         <!-- START FORM -->
         <div class="my-3 p-3 bg-body rounded shadow-sm">
-            <form action='/postAbsen' method='post'>
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $item)
+                            <li>{{$item}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <form action="{{ url('/absen/'.$absen->id) }}" method="post">
+                @csrf
+                @method('PUT')
                 <div class="mb-3 row">
                     <label for="nama" class="col-sm-2 col-form-label">Nama</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name='nama' id="nama">
+                        <input type="text" class="form-control" name='nama' id="nama" value="{{ $absen->nama }}">
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="status_waktu" class="col-sm-2 col-form-label">Jam Masuk</label>
-                    <div class="col-sm-10">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="status_waktu" id="tepat_waktu" value="tepat_waktu" checked>
-                            <label class="form-check-label" for="tepat_waktu">
-                                Tepat Waktu
-                            </label>
+                    @if ($absen->jam_telat)
+                        <label for="jam_telat" class="col-sm-2 col-form-label text-danger">Terlambat</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="jam_telat" id="jam_telat" value="{{ $absen->jam_telat }}">
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="status_waktu" id="terlambat" value="terlambat">
-                            <label class="form-check-label" for="terlambat">
-                                Terlambat
-                            </label>
+                    @else
+                        <label for="jam_masuk" class="col-sm-2 col-form-label text-success">Tepat Waktu</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="jam_masuk" id="jam_masuk" value="{{ $absen->jam_masuk }}">
                         </div>
-                    </div>
+                    @endif
                 </div>
                 <div class="mb-3 row">
                     <label class="col-sm-2 col-form-label"></label>
@@ -43,6 +50,8 @@
                     </div>
                 </div>
             </form>
+            
+            
         </div>
         <!-- AKHIR FORM -->
     </main>
