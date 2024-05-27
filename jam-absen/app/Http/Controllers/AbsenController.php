@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
@@ -36,8 +37,21 @@ class AbsenController extends Controller
     public function store(Request $request)
     {
         $nama = $request->nama;
+        $status_waktu = $request->status_waktu;
+
+        $jam_masuk = null;
+        $jam_telat = null;
+
+        if ($status_waktu == 'tepat_waktu') {
+            $jam_masuk = Carbon::now()->format('H:i:s');
+        }elseif ($status_waktu == 'terlambat') {
+            $jam_telat = Carbon::now()->format('H:i:s');
+        }
+
         $parameter = [
-            'nama' => $nama
+            'nama' => $nama,
+            'jam_masuk' => $jam_masuk,
+            'jam_telat' => $jam_telat,
         ];
 
         $client = new Client();
@@ -50,7 +64,7 @@ class AbsenController extends Controller
         $contentArray = json_decode($content, true);
         if ($contentArray['status'] != true) {
             $error = $contentArray['data'];
-            return redirect()->to('/')->withErrors($error);
+            return redirect()->to('/')->withErrors($error)->withInput();
         } else {
             return redirect()->to('/')->with('succsess', 'Berhasil menambahkan data');
         }
@@ -69,9 +83,17 @@ class AbsenController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // $client = new Client();
+        // $url = "http://localhost:8000/api/absen/$id";
+        // $response = $client->request('GET', $url);
+        // $content = $response->getBody()->getContents();
+        // $contentArray = json_decode($content, true);
+        // if($contentArray['status'] != true){
+        //     $error = $contentArray['massage'];
+        //     return redirect()->to('/')->withErrors($error);
+        // }
     }
-
+    
     /**
      * Update the specified resource in storage.
      */
@@ -85,6 +107,16 @@ class AbsenController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        //  $client = new Client();
+        // $url = "http://localhost:8000/api/absen/$id";
+        // $response = $client->request('Delete', $url);
+        // $content = $response->getBody()->getContents();
+        // $contentArray = json_decode($content, true);
+        // if ($contentArray['status'] != true) {
+        //     $error = $contentArray['data'];
+        //     return redirect()->to('/')->withErrors($error)->withInput();
+        // } else {
+        //     return redirect()->to('/')->with('succsess', 'Berhasil hapus data');
+        // }
     }
 }

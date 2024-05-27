@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Data Buku</title>
+    <title>Data Absen</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 </head>
 
@@ -57,6 +57,7 @@
         <!-- AKHIR FORM -->
 
         <!-- START DATA -->
+        
         <div class="my-3 p-3 bg-body rounded shadow-sm">
             <table class="table table-striped">
                 <thead>
@@ -81,8 +82,12 @@
                         <td>{{$item['jam_telat']}}</td>
                         <td>{{$item['jam_keluar']}}</td>
                         <td>
-                            <a href="{{ url('absen/'.$item['id']) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="" class="btn btn-danger btn-sm">Del</a>
+                            <a href="" class="btn btn-warning btn-sm">Edit</a>
+                            {{-- <form action="{{ url('/').$item['id'] }}" method="POST" onsubmit="return confirm('apakah yakin ingin menghapus data?')" class="d-inline">
+                            @csrf
+                            @method('delete')    
+                            </form> --}}
+                            <a href="" name="submit" class="btn btn-danger btn-sm">Del<a>
                             <a href="" class="btn btn-primary btn-sm">Keluar</a>
                         </td>
                     </tr>
