@@ -88,7 +88,7 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" >Delete</button>
                             </form>                             
-                            <a href="" class="btn btn-primary btn-sm">Keluar</a>
+                            <a href="{{ url('absen/jamkeluar/edit/'.$item['id']) }}" class="btn btn-primary btn-sm">Keluar</a>
                         </td>
                     </tr>
                     <?php $i++ ?>

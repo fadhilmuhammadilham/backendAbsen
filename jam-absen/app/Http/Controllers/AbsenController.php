@@ -106,51 +106,88 @@ class AbsenController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-{
-    $request->validate([
-        'nama' => 'required',
-        'jam_masuk' => 'nullable|date_format:H:i:s',
-        'jam_telat' => 'nullable|date_format:H:i:s',
-        'jam_keluar' => 'nullable|date_format:H:i:s',
-    ]);
+    {
+        $request->validate([
+            'nama' => 'required',
+            'jam_masuk' => 'nullable|date_format:H:i:s',
+            'jam_telat' => 'nullable|date_format:H:i:s',
+            'jam_keluar' => 'nullable|date_format:H:i:s',
+        ]);
 
-    $absen = Absen::find($id);
+        $absen = Absen::find($id);
 
-    if (!$absen) {
-        return redirect('/')->withErrors('Data tidak ditemukan');
+        if (!$absen) {
+            return redirect('/')->withErrors('Data tidak ditemukan');
+        }
+
+        $absen->nama = $request->nama;
+        $absen->jam_masuk = $request->jam_masuk;
+        $absen->jam_telat = $request->jam_telat;
+        $absen->jam_keluar = $request->jam_keluar;
+
+        $absen->save();
+
+        return redirect('/')->with('success', 'Data berhasil diupdate');
     }
 
-    $absen->nama = $request->nama;
-    $absen->jam_masuk = $request->jam_masuk;
-    $absen->jam_telat = $request->jam_telat;
-    $absen->jam_keluar = $request->jam_keluar;
+    public function editKeluar(string $id)
+    {
+        // $client = new Client();
+        // $url = "http://localhost:8000/api/absen/$id";
+        // $response = $client->request('GET', $url);
+        // $content = $response->getBody()->getContents();
+        // $contentArray = json_decode($content, true);
+        // if($contentArray['status'] != true){
+        //     $error = $contentArray['massage'];
+        //     return redirect()->to('/')->withErrors($error);
+        // }
+        $absen = Absen::find($id);
 
-    $absen->save();
+        if (!$absen) {
+            return redirect('/')->withErrors('Data tidak ditemukan');
+        }
 
-    return redirect('/')->with('success', 'Data berhasil diupdate');
-}
+        return view('Absen.jamKeluar', ['absen' => $absen]);
+    }
+
+    public function updateKeluar(Request $request, string $id)
+    {
+        $request->validate([
+            'jam_keluar' => 'nullable|date_format:H:i:s',
+        ]);
+
+        $absen = Absen::find($id);
+
+        if (!$absen) {
+            return redirect('/')->withErrors('Data tidak ditemukan');
+        }
+
+        if (empty($absen->jam_masuk) && empty($absen->jam_telat)) {
+            return redirect('/')->withErrors('Anda harus mengisi jam_masuk atau jam_telat sebelum menambahkan jam_keluar.');
+        }
+
+        $absen->jam_keluar = $request->jam_keluar;
+
+        $absen->save();
+
+        return redirect('/')->with('success', 'Data berhasil diupdate');
+    }
 
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-{
-    $absen = Absen::find($id);
+    {
+        $absen = Absen::find($id);
 
-    if (!$absen) {
-        // Debugging
-        return redirect('/')->withErrors('Data tidak ditemukan dengan ID: ' . $id);
-    }
+        if (!$absen) {
+            return redirect('/')->withErrors('Data tidak ditemukan dengan ID: ' . $id);
+        }
 
-    $absen->delete();
+        $absen->delete();
 
-    return redirect('/')->with('success', 'Data berhasil dihapus');
-}
-
-    
-}
-
+        return redirect('/')->with('success', 'Data berhasil dihapus');
         //  $client = new Client();
         // $url = "http://localhost:8000/api/absen/$id";
         // $response = $client->request('Delete', $url);
@@ -162,3 +199,5 @@ class AbsenController extends Controller
         // } else {
         //     return redirect()->to('/')->with('succsess', 'Berhasil hapus data');
         // }
+    }
+}
