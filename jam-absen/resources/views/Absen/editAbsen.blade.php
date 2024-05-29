@@ -43,6 +43,14 @@
                         </div>
                     @endif
                 </div>
+                @if ($absen->jam_keluar)
+                <div class="mb-3 row">
+                    <label for="jam_keluar" class="col-sm-2 col-form-label">Jam Keluar</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="jam_keluar" id="jam_keluar" value="{{ $absen->jam_keluar }}">
+                    </div>
+                </div>
+                @endif
                 <div class="mb-3 row">
                     <label class="col-sm-2 col-form-label"></label>
                     <div class="col-sm-10">

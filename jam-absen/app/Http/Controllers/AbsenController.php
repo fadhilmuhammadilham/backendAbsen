@@ -153,7 +153,7 @@ class AbsenController extends Controller
     public function updateKeluar(Request $request, string $id)
     {
         $request->validate([
-            'jam_keluar' => 'nullable|date_format:H:i:s',
+            'jam_keluar' => 'date_format:H:i:s',
         ]);
 
         $absen = Absen::find($id);
